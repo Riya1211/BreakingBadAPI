@@ -1,62 +1,62 @@
-const container = document.getElementById('charContainer');
-const id = 116;
+const card_container = document.getElementById('card-container');
+const id = 57;
 
-const fetchChars = async () => {
-    for (let i = 1; i <= id; i++) {
-        await getChars(i);
-    }
-}
-
-const getChars = async (char_id) => {
-    const url = `https://www.breakingbadapi.com/api/characters/${char_id}`;
+const getChars = async () => {
+    const url = `https://www.breakingbadapi.com/api/characters`;
     const res = await fetch(url);
     const data = await res.json();
-    createCard(data);
+    for (let i = 0; i <= id; i++) {
+        createCard(data[i]);
+    }
+    // createCard(data);
+    // console.log(data);
 }
+
 
 const createCard = data =>{
     const el = document.createElement('div');
-    el.classList.add('data');
-    const { name, birthday, nickname, status, img } = data;
+    el.classList.add('card');
     const charInnerHTML = `
-        <div class="img-container">
-            <img src="${img}" alt="${name}" />
-        </div>
-        <div class="info">
-            <h4 class="name">Name: ${name}</h4>
-            <h4 class="name">Nickname: ${nickname}</h4>
-            <h4 class="name">Birthday: ${birthday}</h4>
-            <h4 class="name">Status: ${status}</h4>    
+        <div class='card-inner'> 
+            <div class='card-front'>
+                <img src=${data.img} alt='' />
+            </div>
+    
+            <div class='card-back'>
+                <h1 id='name'>${data.name}</h1>
+                <ul>
+                    <li>
+                        <strong>Actor Name:</strong> ${data.portrayed}
+                    </li>
+                    <li>
+                        <strong>Nickname:</strong> ${data.nickname}
+                    </li>
+                    <li>
+                        <strong>Birthday:</strong> ${data.birthday}
+                    </li>
+                    <li>
+                        <strong>Status:</strong> ${data.status}
+                    </li>
+                </ul>
+            </div>
         </div>
     `
-    // el.classList.add('cards');
-    // const { name, birthday, nickname, status, img, portrayed } = data;
-    // const charInnerHTML = `
-    // <div class='card'>
-    //     <div class='card-inner'>
-    //         <div class='card-front'>
-    //             <img src=${img} alt='' />
-    //         </div>
-    //     <div class='card-back'>
-    //         <h1>${name}</h1>
-    //         <ul>
-    //             <li>
-    //                 <strong>Actor Name:</strong> ${portrayed}
-    //             </li>
-    //             <li>
-    //                 <strong>Nickname:</strong> ${nickname}
-    //             </li>
-    //             <li>
-    //                 <strong>Birthday:</strong> ${birthday}
-    //             </li>
-    //             <li>
-    //                 <strong>Status:</strong> ${status}
-    //             </li>
-    //         </ul>
-    //     </div>
-    // </div>
-    // `
     el.innerHTML = charInnerHTML;
-    container.appendChild(el);
+    card_container.appendChild(el);
 }
-fetchChars();
+getChars();
+
+// Filter search
+
+document.getElementById('filterInput').addEventListener('keyup',() => {
+    let filterValue = document.getElementById('filterInput').value.toUpperCase();
+    let heading = document.getElementById('name');
+
+
+    
+    heading.forEach(item => {
+        let a = item.getElementsByTagName('a')[0];
+        item.style.display = a.innerHTML.toUpperCase().startsWith(filterValue) ? "block" : "none";
+    })
+    
+})  
